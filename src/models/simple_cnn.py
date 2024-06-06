@@ -5,6 +5,19 @@ from typing import Tuple, Union
 from collections import OrderedDict
 
 
+# 添加SaltLayer类
+class SaltLayer(nn.Module):
+    def __init__(self, salt_dim):
+        super(SaltLayer, self).__init__()
+        self.salt_dim = salt_dim
+
+    def forward(self, x):
+        salt = torch.randn_like(x[:, :self.salt_dim])  # 生成与输入相同维度的噪声
+        return torch.cat((x, salt), dim=1)  # 将噪声与输入拼接
+
+    def decode(self, x):
+        return x[:, :-self.salt_dim]  # 去除噪声，恢复原始输入
+
 class SenFier_ML(nn.Module):
     def __init__(self, num_classes):
         super().__init__()
