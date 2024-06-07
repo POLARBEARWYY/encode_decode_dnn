@@ -151,6 +151,48 @@ class SenNet(nn.Module):
         out = self.classifier(embed)
         return out
 
+# 添加一个具有编码和解码层的类
+class SimpleCNNwithEncoderDecoder(nn.Module):
+    def __init__(self, num_classes=10):
+        super(SimpleCNN, self).__init__()
+        
+        # Encoder part
+        self.encoder = nn.Sequential(
+            nn.Conv2d(3, 64, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Conv2d(64, 128, kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2)
+        )
+        
+        self.fc1 = nn.Linear(128 * 8 * 8, 256)
+        self.fc2 = nn.Linear(256, num_classes)
+        
+        # Decoder part
+        self.decoder_fc = nn.Linear(256, 128 * 8 * 8)
+        self.decoder = nn.Sequential(
+            nn.ConvTranspose2d(128, 64, kernel_size=2, stride=2),
+            nn.ReLU(),
+            nn.ConvTranspose2d(64, 3, kernel_size=2, stride=2),
+            nn.Sigmoid()
+        )
+        
+    def forward(self, x):
+        encoded = self.encoder(x)
+        encoded = encoded.view(encoded.size(0), -1)
+        fc_output = self.fc1(encoded)
+        
+        decoded = self.decoder_fc(fc_output)
+        decoded = decoded.view(-1, 128, 8, 8)
+        decoded = self.decoder(decoded)
+        
+        output = self.fc2(fc_output)
+        
+        return output, decoded
+
+def simplecnnwithEncoderDecoder(num_classes=10):
+    return SimpleCNNwithEncoderDecoder(num_classes)
 
 class SimpleCNN(nn.Module):
     def __init__(self,  num_classes=10, salt_layer=-1, 
