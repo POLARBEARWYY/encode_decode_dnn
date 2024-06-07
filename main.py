@@ -16,6 +16,10 @@ import exp_setup
 from torch.utils.data import DataLoader, TensorDataset
 import torch.optim as optim
 
+from PIL import Image
+from torchvision.datasets import CIFAR10
+from simple_cnn import simple_cnn
+
 # SimpleCNNWithSalt（另一种salt,其实就是encode,decode)
 def preprocess_data(data):
     data = data.transpose((0, 3, 1, 2))  # 将数据从 NHWC 转换为 NCHW
