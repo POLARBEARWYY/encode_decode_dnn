@@ -10,7 +10,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description="To Set up the Experiment.")
     parser.add_argument('--data_preprocessing', default=1, help="For the first time, for each dataset, you need to set this to 1")    
     ### CIFAR-10
-    #parser.add_argument("--dataset", default="cifar10", help="")
+    parser.add_argument("--dataset", default="cifar10", help="")
     parser.add_argument('--image_size', default=32, help="Size of the Input: e.g., 32x32")
     parser.add_argument("--num_classes", default=10, help="")
     parser.add_argument('--num_input_channels', default=3, help="")
@@ -42,7 +42,9 @@ def get_parser():
     parser.add_argument('--learning_rate', default=0.001, type=float, help='学习率')
     parser.add_argument('--reproducibility', action='store_true', help='是否保持结果可重复')
     parser.add_argument('--rand_seed', default=42, type=int, help='随机种子')
-    parser.add_argument('--dataset', default='CIFAR10', type=str, help='数据集名称')
+    parser.add_argument('--image_size', type=int, default=32)
+    parser.add_argument('--data_preprocessing', type=int, default=1)
+    #parser.add_argument('--dataset', default='CIFAR10', type=str, help='数据集名称')
     ## Standard DNN
     # parser.add_argument('--salt_type',   default="none", help="none, cnn, or fc")    
     # parser.add_argument('--salt_layer',   default=-1, help="-1 for none or 0-8")    
